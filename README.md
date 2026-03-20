@@ -1,4 +1,4 @@
-# Relatório da NOME DA ATIVIDADE
+# Relatório da unieuro-concorrente-202601-atividade3
 
 **Disciplina: Programação Concorrente e Distribuída** 
 **Aluno(s): Filipe Ferreira Gonçalves**
@@ -10,7 +10,7 @@
 
 # 1. Descrição do Problema
 
-Descreva o problema computacional resolvido pelo programa.
+O programa resolve o problema de processamento massivo de arquivos de texto (logs operacionais). O sistema precisa ler milhares de arquivos, contar o total de linhas, palavras, caracteres e identificar a frequência de palavras-chave específicas ("erro", "warning", "info").Algoritmo utilizado: Modelo Produtor-Consumidor com buffer limitado. Um processo "Produtor" alimenta uma fila de arquivos, enquanto múltiplos processos "Consumidores" retiram os arquivos da fila e realizam o processamento pesado de forma simultânea.Tamanho da entrada: 1.000 arquivos de log (pasta log2), totalizando 10.000.000 de linhas e 200.000.000 de palavras.Objetivo da paralelização: Reduzir o tempo total de execução, aproveitando os múltiplos núcleos do processador para processar diversos arquivos ao mesmo tempo, superando o gargalo da execução sequencial.Complexidade aproximada: $O(n)$, onde $n$ é o número total de linhas processadas.
 
 ## Orientações para preenchimento
 
@@ -52,61 +52,35 @@ Informar as características do hardware e software utilizados na execução dos
 
 # 3. Metodologia de Testes
 
-Explique como os experimentos foram conduzidos.
+Medição de tempo: Utilizada a biblioteca time do Python para medir o tempo de relógio real (wall time) do início ao fim do processamento.
 
-## Orientações
+Execuções: Foi realizada a execução serial completa para obter o baseline e execuções paralelas variando o número de processos (2, 4, 8 e 12).
 
-Descrever:
+Entrada: Pasta log2 fixa para todos os testes, garantindo a integridade da comparação.
 
-* Como o tempo de execução foi medido
-* Quantas execuções foram realizadas
-* Se foi utilizada média dos tempos
-* Qual tamanho da entrada foi usado
-
-### Configurações testadas
-
-Os experimentos devem ser realizados nas seguintes configurações:
-
-* 1 thread/processo (versão serial)
-* 2 threads/processos
-* 4 threads/processos
-* 8 threads/processos
-* 12 threads/processos
+Condições: Máquina em estado de uso normal, com processos de fundo padrão do Windows 11.
 
 ### Procedimento experimental
 
-Descrever:
-
-* Número de execuções para cada configuração
-* Forma de cálculo da média
-* Condições de execução (ex: máquina dedicada, carga do sistema, etc.)
+As métricas foram calculadas comparando o tempo serial $T(1) = 94,25s$ com o tempo paralelo $T(p)$.
 
 ---
 
 # 4. Resultados Experimentais
 
-Preencha a tabela com os **tempos médios de execução** obtidos.
-
-## Orientações
-
-* O tempo deve ser informado em **segundos**
-* Utilizar a **média das execuções**
-
 | Nº Threads/Processos | Tempo de Execução (s) |
 | -------------------- | --------------------- |
-| 1                    |                       |
-| 2                    |                       |
-| 4                    |                       |
-| 8                    |                       |
-| 12                   |                       |
+| 1 (Serial)           |         94.2502       |
+| 2                    |         47.5848       |
+| 4                    |         26.6610       |
+| 8                    |         17.0822       |
+| 12                   |         16.0659       |
 
 ---
 
 # 5. Cálculo de Speedup e Eficiência
 
-## Fórmulas Utilizadas
-
-### Speedup
+As métricas foram calculadas comparando o tempo serial $T(1) = 94,25s$ com o tempo paralelo $T(p)$.
 
 ```
 Speedup(p) = T(1) / T(p)
@@ -135,24 +109,15 @@ Preencha a tabela abaixo utilizando os tempos medidos.
 
 | Threads/Processos | Tempo (s) | Speedup | Eficiência |
 | ----------------- | --------- | ------- | ---------- |
-| 1                 |           | 1.0     | 1.0        |
-| 2                 |           |         |            |
-| 4                 |           |         |            |
-| 8                 |           |         |            |
-| 12                |           |         |            |
+| 1                 |     94.2502      | 1.0     | 1.0        |
+| 2                 |     47.5848      | 2.44    | 1.22       |
+| 4                 |     26.6610      | 4.35    | 1.09       |
+| 8                 |     17.0822      | 6.79    | 0.85       |
+| 12                |     16.0659      | 7.22    | 0.60       |
 
 ---
 
 # 7. Gráfico de Tempo de Execução
-
-Construa um gráfico mostrando o **tempo de execução em função do número de threads/processos**.
-
-## Orientações
-
-* Eixo X: número de threads/processos
-* Eixo Y: tempo de execução (segundos)
-
-Inserir o gráfico abaixo:
 
 ![Gráfico Tempo Execução](graficos/tempo_execucao.png)
 
@@ -160,31 +125,11 @@ Inserir o gráfico abaixo:
 
 # 8. Gráfico de Speedup
 
-Construa um gráfico mostrando o **speedup obtido**.
-
-## Orientações
-
-* Eixo X: número de threads/processos
-* Eixo Y: speedup
-* Incluir também a **linha de speedup ideal (linear)** para comparação
-
-Inserir o gráfico abaixo:
-
 ![Gráfico Speedup](graficos/speedup.png)
 
 ---
 
 # 9. Gráfico de Eficiência
-
-Construa um gráfico mostrando a **eficiência da paralelização**.
-
-## Orientações
-
-* Eixo X: número de threads/processos
-* Eixo Y: eficiência
-* Valores entre 0 e 1
-
-Inserir o gráfico abaixo:
 
 ![Gráfico Eficiência](graficos/eficiencia.png)
 
@@ -192,35 +137,28 @@ Inserir o gráfico abaixo:
 
 # 10. Análise dos Resultados
 
-Realize uma análise crítica dos resultados obtidos.
+Speedup e Eficiência: Observou-se um fenômeno de Speedup Super-linear nos testes com 2 e 4 processos (Eficiência > 1.0). Isso pode ocorrer devido à melhor utilização do cache do processador ou pela forma como o Windows gerencia a prioridade de múltiplos processos em relação a um único processo longo.
 
-## Questões a serem respondidas
+Escalabilidade: A aplicação escalou muito bem até 8 processos. O ganho entre 8 e 12 processos foi de apenas 1.01 segundo, indicando que o sistema atingiu um platô.
 
-* O speedup obtido foi próximo do ideal?
-* A aplicação apresentou escalabilidade?
-* Em qual ponto a eficiência começou a cair?
-* O número de threads ultrapassa o número de núcleos físicos da máquina?
-* Houve overhead de paralelização?
+Ponto de Queda: A eficiência começou a cair abaixo de 1.0 ao ultrapassar 4 processos.
 
-Discutir possíveis causas para:
+Cores Físicos vs Lógicos: O processador i5-12500 possui 6 núcleos. Ao utilizar 8 e 12 processos, ultrapassamos os núcleos físicos, entrando na zona de Hyper-Threading (núcleos lógicos). Isso explica o ganho marginal reduzido no teste de 12 processos.
 
-* perda de desempenho
-* gargalos no algoritmo
-* sincronização entre threads/processos
-* comunicação entre processos
-* contenção de memória ou cache
-
+Overhead: Houve overhead de gerenciamento de processos e contenção de I/O (disco) ao tentar ler arquivos simultaneamente com 12 processos, o que limitou o ganho de desempenho final.
 ---
 
 # 11. Conclusão
 
-Apresente as conclusões do experimento.
+O paralelismo trouxe um ganho de desempenho massivo, reduzindo o tempo de processamento de aproximadamente 94 segundos para 16 segundos (uma redução de 83%).
 
-## Sugestões de pontos a comentar
+O melhor equilíbrio entre desempenho e uso de recursos foi de 8 processos. Acima disso, o custo de trocar de contexto e a disputa pelo acesso ao disco rígido tornam o ganho irrelevante. A implementação do modelo Produtor-Consumidor com buffer limitado foi eficaz para evitar o consumo excessivo de memória, mantendo o sistema estável durante todo o processamento de 10 milhões de linhas.
 
-* O paralelismo trouxe ganho significativo de desempenho?
-* Qual foi o melhor número de threads/processos?
-* O programa escala bem com o aumento do paralelismo?
-* Quais melhorias poderiam ser feitas na implementação?
+Resultado Consolidado para Conferência:
+Total de Linhas: 10.000.000
+
+Total de Palavras: 200.000.000
+
+ERRO: 33.332.083 | WARNING: 33.330.520 | INFO: 33.329.065
 
 ---

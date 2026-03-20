@@ -40,7 +40,7 @@ Condições: Máquina em estado de uso normal, com processos de fundo padrão do
 
 ### Procedimento experimental
 
-As métricas foram calculadas comparando o tempo serial $T(1) = 94,25s$ com o tempo paralelo $T(p)$.
+As métricas foram calculadas comparando o tempo serial $T(1) = 101.2226s$ com o tempo paralelo $T(p)$.
 
 ---
 
@@ -48,7 +48,7 @@ As métricas foram calculadas comparando o tempo serial $T(1) = 94,25s$ com o te
 
 | Nº Threads/Processos | Tempo de Execução (s) |
 | -------------------- | --------------------- |
-| 1 (Serial)           |         94.2502       |
+| 1 (Serial)           |         101.2226     |
 | 2                    |         47.5848       |
 | 4                    |         26.6610       |
 | 8                    |         17.0822       |

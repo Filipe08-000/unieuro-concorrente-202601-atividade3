@@ -12,31 +12,9 @@
 
 O programa resolve o problema de processamento massivo de arquivos de texto (logs operacionais). O sistema precisa ler milhares de arquivos, contar o total de linhas, palavras, caracteres e identificar a frequência de palavras-chave específicas ("erro", "warning", "info").Algoritmo utilizado: Modelo Produtor-Consumidor com buffer limitado. Um processo "Produtor" alimenta uma fila de arquivos, enquanto múltiplos processos "Consumidores" retiram os arquivos da fila e realizam o processamento pesado de forma simultânea.Tamanho da entrada: 1.000 arquivos de log (pasta log2), totalizando 10.000.000 de linhas e 200.000.000 de palavras.Objetivo da paralelização: Reduzir o tempo total de execução, aproveitando os múltiplos núcleos do processador para processar diversos arquivos ao mesmo tempo, superando o gargalo da execução sequencial.Complexidade aproximada: $O(n)$, onde $n$ é o número total de linhas processadas.
 
-## Orientações para preenchimento
-
-Explique:
-
-* Qual problema foi implementado
-* Qual algoritmo foi utilizado
-* Qual o tamanho da entrada utilizada nos testes
-* Qual o objetivo da paralelização
-
-**Questões que devem ser respondidas:**
-
-* Qual é o objetivo do programa?
-* Qual o volume de dados processado?
-* Qual algoritmo foi utilizado?
-* Qual a complexidade aproximada do algoritmo?
-
 ---
 
 # 2. Ambiente Experimental
-
-Descreva o ambiente em que os experimentos foram realizados.
-
-## Orientações
-
-Informar as características do hardware e software utilizados na execução dos testes.
 
 | Item                        | Descrição |
 | --------------------------- | --------- |

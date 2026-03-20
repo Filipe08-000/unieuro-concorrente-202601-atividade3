@@ -30,17 +30,7 @@ O programa resolve o problema de processamento massivo de arquivos de texto (log
 
 # 3. Metodologia de Testes
 
-Medição de tempo: Utilizada a biblioteca time do Python para medir o tempo de relógio real (wall time) do início ao fim do processamento.
-
-Execuções: Foi realizada a execução serial completa para obter o baseline e execuções paralelas variando o número de processos (2, 4, 8 e 12).
-
-Entrada: Pasta log2 fixa para todos os testes, garantindo a integridade da comparação.
-
-Condições: Máquina em estado de uso normal, com processos de fundo padrão do Windows 11.
-
-### Procedimento experimental
-
-As métricas foram calculadas comparando o tempo serial $T(1) = 101.2226s$ com o tempo paralelo $T(p)$.
+Medição de tempo: Utilizada a biblioteca time do Python para medir o tempo de relógio real (wall time) do início ao fim do processamento.Execuções: Foi realizada a execução serial completa para obter o baseline e execuções paralelas variando o número de processos (2, 4, 8 e 12).Entrada: Pasta log2 fixa para todos os testes, garantindo a integridade da comparação.Condições: Máquina em estado de uso normal, com processos de fundo padrão do Windows 11.Procedimento experimentalAs métricas foram calculadas comparando o tempo serial $T(1) = 101.2226s$ com o tempo paralelo $T(p)$.
 
 ---
 
@@ -58,7 +48,7 @@ As métricas foram calculadas comparando o tempo serial $T(1) = 101.2226s$ com o
 
 # 5. Cálculo de Speedup e Eficiência
 
-As métricas foram calculadas comparando o tempo serial $T(1) = 94,25s$ com o tempo paralelo $T(p)$.
+As métricas foram calculadas comparando o tempo serial $T(1) = 101,2226s$ com o tempo paralelo $T(p)$.
 
 ```
 Speedup(p) = T(1) / T(p)
@@ -115,28 +105,14 @@ Preencha a tabela abaixo utilizando os tempos medidos.
 
 # 10. Análise dos Resultados
 
-Speedup e Eficiência: Observou-se um fenômeno de Speedup Super-linear nos testes com 2 e 4 processos (Eficiência > 1.0). Isso pode ocorrer devido à melhor utilização do cache do processador ou pela forma como o Windows gerencia a prioridade de múltiplos processos em relação a um único processo longo.
+Speedup e Eficiência: Diferente de testes anteriores, não se observou Speedup Super-linear. A eficiência manteve-se extremamente alta com 2 processos (0.99), demonstrando um excelente aproveitamento inicial. À medida que o número de threads aumentou, a eficiência caiu gradualmente, o que é esperado devido ao overhead de gerenciamento.Escalabilidade: A aplicação escalou de forma consistente até 12 threads. O ganho entre 8 e 12 processos foi de 2,39 segundos ($19,55s - 17,16s$). Embora o tempo continue caindo, a curva de ganho começa a se achatar, indicando que o sistema está próximo do seu limite de benefício por paralelismo.Eficiência: A eficiência caiu abaixo de 0.90 a partir de 8 processos (0.65), chegando a 0.49 com 12 processos. Isso indica que, embora o tempo total diminua, cada núcleo adicional contribui menos para o desempenho final.Cores Físicos vs Lógicos: O processador i5-12500 possui 6 núcleos físicos e 12 threads (núcleos lógicos). Os resultados mostram que o desempenho melhora até 12 threads, mas o salto de desempenho é muito mais expressivo enquanto estamos dentro do limite de núcleos físicos (até 6). Ao usar 8 e 12 threads, entramos na zona de Hyper-Threading, onde a disputa por recursos de execução dentro do mesmo núcleo físico limita a eficiência.Overhead: A queda de eficiência para 0.49 com 12 threads é explicada pelo custo de troca de contexto e, principalmente, pela saturação do barramento de I/O, já que 12 instâncias tentam ler arquivos do disco simultaneamente.
 
-Escalabilidade: A aplicação escalou muito bem até 8 processos. O ganho entre 8 e 12 processos foi de apenas 1.01 segundo, indicando que o sistema atingiu um platô.
-
-Ponto de Queda: A eficiência começou a cair abaixo de 1.0 ao ultrapassar 4 processos.
-
-Cores Físicos vs Lógicos: O processador i5-12500 possui 6 núcleos. Ao utilizar 8 e 12 processos, ultrapassamos os núcleos físicos, entrando na zona de Hyper-Threading (núcleos lógicos). Isso explica o ganho marginal reduzido no teste de 12 processos.
-
-Overhead: Houve overhead de gerenciamento de processos e contenção de I/O (disco) ao tentar ler arquivos simultaneamente com 12 processos, o que limitou o ganho de desempenho final.
 ---
 
 # 11. Conclusão
 
-O paralelismo trouxe um ganho de desempenho massivo, reduzindo o tempo de processamento de aproximadamente 94 segundos para 16 segundos (uma redução de 83%).
+O paralelismo trouxe um ganho de desempenho massivo, reduzindo o tempo de processamento de 101,22 segundos para 17,16 segundos (uma redução de aproximadamente 83%).
 
-O melhor equilíbrio entre desempenho e uso de recursos foi de 8 processos. Acima disso, o custo de trocar de contexto e a disputa pelo acesso ao disco rígido tornam o ganho irrelevante. A implementação do modelo Produtor-Consumidor com buffer limitado foi eficaz para evitar o consumo excessivo de memória, mantendo o sistema estável durante todo o processamento de 10 milhões de linhas.
-
-Resultado Consolidado para Conferência:
-Total de Linhas: 10.000.000
-
-Total de Palavras: 200.000.000
-
-ERRO: 33.332.083 | WARNING: 33.330.520 | INFO: 33.329.065
+O melhor equilíbrio entre desempenho e eficiência de recursos foi observado com 4 processos (Eficiência de 0.91). Embora 12 processos ofereçam o menor tempo absoluto, o custo de oportunidade (uso de CPU vs. ganho de tempo) é menor. A implementação do modelo Produtor-Consumidor com buffer limitado provou-se robusta para processar o volume de 10 milhões de linhas, mantendo a integridade da contagem de termos ("ERRO", "WARNING", "INFO").
 
 ---
